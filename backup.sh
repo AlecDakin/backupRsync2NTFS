@@ -10,6 +10,8 @@ if [ "$USBDRIVE" -eq 1 ]; then
 	# delete old logs and backups - more than 90 days
 	find $DIRLOC/logs/*.log -mtime +90 -type f -delete
 	find $DIRLOC/backup/backup* -mtime +90 -type d -ls -exec rm -rv {} +
+	# sync the home directory to storage, so it also gets backed up
+	rsync -brtvhP /home/ /storage/home/
         # Run the rsync
         rsync -brtvhP --modify-window=2 --stats --delete-delay --delete-excluded --force --exclude=spool --exclude="*.tmp" --exclude="*~$*" --log-file=$LOGLOC --backup-dir=$BACKUPLOC /storage/ $DIRLOC/live/
 	#sync to flush writes to USB device
